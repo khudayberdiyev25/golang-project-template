@@ -1,7 +1,9 @@
 package main
 
-import "golang-project-template/cmd/app"
+import "net/http"
 
 func main() {
-	app.Execute()
+	http.ListenAndServe(":5005", http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
+		writer.Write([]byte("pong"))
+	}))
 }
