@@ -19,7 +19,7 @@ func NewImageUseCase(db sql.DB) domain.ImageUseCase {
 	}
 }
 
-func (i *imageUseCase) Create(request domain.ImageRequest) (int64, error) {
+func (i *imageUseCase) Create(request domain.ImageRequest) (int, error) {
 	id, err := i.repository.Save(domain.Image{
 		Name: request.Name,
 	})

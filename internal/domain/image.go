@@ -22,7 +22,7 @@ type ImageHeaderResponse struct {
 type ImageUseCase interface {
 
 	// Create docker build
-	Create(request ImageRequest) (int64, error)
+	Create(request ImageRequest) (int, error)
 
 	// Filter docker images
 	Filter(name string) ([]ImageHeaderResponse, error)
