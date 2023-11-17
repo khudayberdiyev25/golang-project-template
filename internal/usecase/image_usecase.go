@@ -2,53 +2,59 @@ package usecase
 
 import (
 	"database/sql"
+	"errors"
+	"fmt"
 	"golang-project-template/internal/domain"
+	"golang-project-template/internal/repository"
 )
 
 type imageUseCase struct {
-	db sql.DB
+	repository domain.ImageRepository
+	mapper     domain.ImageMapper
 }
 
 func NewImageUseCase(db sql.DB) domain.ImageUseCase {
 	return &imageUseCase{
-		db: db,
+		repository: repository.NewImagePostgresRepository(db),
 	}
 }
 
 func (i *imageUseCase) Create(request domain.ImageRequest) (int64, error) {
-	var id int64
-	err := i.db.QueryRow(`insert into images(name) values ($1) returning id`, request.Name).Scan(&id)
+	id, err := i.repository.Save(domain.Image{
+		Name: request.Name,
+	})
 	if err != nil {
-		return 0, err
+		return -1, err
 	}
 	return id, nil
 }
 
 func (i *imageUseCase) Filter(name string) ([]domain.ImageHeaderResponse, error) {
-	rows, err := i.db.Query(`select * from images i where i.name = $1`, name)
+	all, err := i.repository.FindAll(name)
 	if err != nil {
 		return nil, err
 	}
-	var images []domain.ImageHeaderResponse
-	rows.Scan(&images)
 
-	return images, nil
+	return i.mapper.MapToHeaderResponseSlice(all), nil
 }
 
 func (i *imageUseCase) DeleteByIdOrName(key string) error {
-	i.db.QueryRow(`delete from images where id = $1 or name = $1`, key)
+	err := i.repository.DeleteByIdOrName(key)
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
 func (i *imageUseCase) DeleteAllUnusedOnes() string {
-	i.db.QueryRow(`delete from images where not exists(select image_id from containers c where c.image_id = $1)`)
-
-	return "Total reclaimed space: 0B"
+	reclaimedSpace := i.repository.DeleteAllUnused()
+	return fmt.Sprintf("Total reclaimed space: %s", reclaimedSpace)
 }
 
 func (i *imageUseCase) GetOne(key string) (domain.ImageDetailedResponse, error) {
-	var response domain.ImageDetailedResponse
-	i.db.QueryRow(`select * from images i where i.id = $1 or i.name = $1`, key).Scan(&response)
-
-	return response, nil
+	image := i.repository.GetByIdOrName(key)
+	if (image == domain.Image{}) {
+		return domain.ImageDetailedResponse{}, errors.New("Image not found")
+	}
+	return i.mapper.MapToDetailedResponse(image), nil
 }

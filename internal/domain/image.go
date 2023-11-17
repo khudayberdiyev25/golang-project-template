@@ -1,7 +1,7 @@
 package domain
 
 type Image struct {
-	Id   int64
+	Id   int
 	Name string
 }
 
@@ -10,10 +10,12 @@ type ImageRequest struct {
 }
 
 type ImageDetailedResponse struct {
+	Id   int
 	Name string
 }
 
 type ImageHeaderResponse struct {
+	Id   int
 	Name string
 }
 
@@ -34,4 +36,12 @@ type ImageUseCase interface {
 
 	// GetOne docker image inspect
 	GetOne(key string) (ImageDetailedResponse, error)
+}
+
+type ImageRepository interface {
+	Save(image Image) (int, error)
+	FindAll(name string) ([]Image, error)
+	GetByIdOrName(key string) Image
+	DeleteByIdOrName(key string) error
+	DeleteAllUnused() float32
 }
