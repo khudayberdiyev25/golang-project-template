@@ -3,25 +3,28 @@ package domain
 type ImageMapper struct {
 }
 
-func (m *ImageMapper) MapToDomain(source ImageRequest) Image {
+func (m *ImageMapper) MapToDomain(source *ImageRequest) *Image {
 
-	return Image{
-		Name: source.Name,
+	return &Image{
+		Name:    source.Name,
+		RepoTag: source.RepoTag,
 	}
 }
 
 func (m *ImageMapper) MapToDetailedResponse(source *Image) *ImageDetailedResponse {
 	return &ImageDetailedResponse{
-		Id:   source.Id,
-		Name: source.Name,
+		Id:      source.Id,
+		Name:    source.Name,
+		RepoTag: source.RepoTag,
 	}
 }
 
 func (m *ImageMapper) MapToHeaderResponse(source Image) ImageHeaderResponse {
 
 	return ImageHeaderResponse{
-		Id:   source.Id,
-		Name: source.Name,
+		Id:      source.Id,
+		Name:    source.Name,
+		RepoTag: source.RepoTag,
 	}
 }
 

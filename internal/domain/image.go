@@ -1,22 +1,33 @@
 package domain
 
+import (
+	"time"
+)
+
 type Image struct {
-	Id   int    `json:"id"`
-	Name string `json:"name"`
+	Id      int
+	Name    string
+	Created time.Time
+	RepoTag string
 }
 
 type ImageRequest struct {
-	Name string
+	Name    string `json:"name"`
+	RepoTag string `json:"repoTag"`
 }
 
 type ImageDetailedResponse struct {
-	Id   int    `json:"id"`
-	Name string `json:"name"`
+	Id      int       `json:"id"`
+	Name    string    `json:"name"`
+	Created time.Time `json:"created"`
+	RepoTag string    `json:"repoTag"`
 }
 
 type ImageHeaderResponse struct {
-	Id   int    `json:"id"`
-	Name string `json:"name"`
+	Id      int       `json:"id"`
+	Name    string    `json:"name"`
+	Created time.Time `json:"created"`
+	RepoTag string    `json:"repoTag"`
 }
 
 type ImageUseCase interface {

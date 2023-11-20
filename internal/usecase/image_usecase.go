@@ -14,14 +14,12 @@ type imageUseCase struct {
 
 func NewImageUseCase(db *sql.DB) domain.ImageUseCase {
 	return &imageUseCase{
-		repository: repository.NewImagePostgresRepository(db),
+		repository: repository.NewImagePostgresRepository(db, &repository.ImagePersistenceSqlMapper{}),
 	}
 }
 
 func (i *imageUseCase) Create(request *domain.ImageRequest) (int, error) {
-	id, err := i.repository.Save(&domain.Image{
-		Name: request.Name,
-	})
+	id, err := i.repository.Save(i.mapper.MapToDomain(request))
 	if err != nil {
 		return -1, err
 	}
