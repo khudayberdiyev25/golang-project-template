@@ -11,6 +11,6 @@ import (
 func main() {
 	db := db.Setup()
 	r := chi.NewRouter()
-	router.Setup(r, *db)
+	router.Setup(r, db)
 	http.ListenAndServe(":5005", r)
 }

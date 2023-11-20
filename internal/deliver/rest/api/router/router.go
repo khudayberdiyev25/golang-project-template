@@ -10,7 +10,7 @@ import (
 	"net/http"
 )
 
-func Setup(r chi.Router, db sql.DB) {
+func Setup(r chi.Router, db *sql.DB) {
 	r.Get("/ping", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("ping"))
 	})

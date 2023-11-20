@@ -7,8 +7,8 @@ import (
 	"golang-project-template/internal/usecase"
 )
 
-func SetupImageRoutes(r chi.Router, db sql.DB) {
-	imageController := controller.ImageController{usecase.NewImageUseCase(db)}
+func SetupImageRoutes(r chi.Router, db *sql.DB) {
+	imageController := controller.ImageController{Usecase: usecase.NewImageUseCase(db)}
 
 	r.Route("/images", func(r chi.Router) {
 		r.Post("/", imageController.Create)

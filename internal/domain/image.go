@@ -22,26 +22,26 @@ type ImageHeaderResponse struct {
 type ImageUseCase interface {
 
 	// Create docker build
-	Create(request ImageRequest) (int, error)
+	Create(request *ImageRequest) (int, error)
 
 	// Filter docker images
-	Filter(name string) ([]ImageHeaderResponse, error)
+	Filter(name string) (*[]ImageHeaderResponse, error)
 
 	// DeleteByIdOrName docker rmi
 	DeleteByIdOrName(key string) error
 
 	// DeleteAllUnusedOnes docker image prune
 	// returns total reclaimed space
-	DeleteAllUnusedOnes() string
+	DeleteAllUnusedOnes() (string, error)
 
 	// GetOne docker image inspect
-	GetOne(key string) (ImageDetailedResponse, error)
+	GetOne(key string) (*ImageDetailedResponse, error)
 }
 
 type ImageRepository interface {
-	Save(image Image) (int, error)
-	FindAll(name string) ([]Image, error)
-	GetByIdOrName(key string) Image
+	Save(image *Image) (int, error)
+	FindAll(name string) (*[]Image, error)
+	GetByIdOrName(key string) (*Image, error)
 	DeleteByIdOrName(key string) error
-	DeleteAllUnused() float32
+	DeleteAllUnused() (float32, error)
 }

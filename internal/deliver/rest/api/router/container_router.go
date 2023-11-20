@@ -5,6 +5,6 @@ import (
 	"github.com/go-chi/chi/v5"
 )
 
-func SetupContainerRoutes(r chi.Router, db sql.DB) {
+func SetupContainerRoutes(r chi.Router, db *sql.DB) {
 
 }

@@ -2,11 +2,9 @@ package usecase
 
 import (
 	"database/sql"
-	"errors"
 	"fmt"
 	"golang-project-template/internal/domain"
 	"golang-project-template/internal/repository"
-	"log"
 )
 
 type imageUseCase struct {
@@ -14,14 +12,14 @@ type imageUseCase struct {
 	mapper     domain.ImageMapper
 }
 
-func NewImageUseCase(db sql.DB) domain.ImageUseCase {
+func NewImageUseCase(db *sql.DB) domain.ImageUseCase {
 	return &imageUseCase{
 		repository: repository.NewImagePostgresRepository(db),
 	}
 }
 
-func (i *imageUseCase) Create(request domain.ImageRequest) (int, error) {
-	id, err := i.repository.Save(domain.Image{
+func (i *imageUseCase) Create(request *domain.ImageRequest) (int, error) {
+	id, err := i.repository.Save(&domain.Image{
 		Name: request.Name,
 	})
 	if err != nil {
@@ -30,7 +28,7 @@ func (i *imageUseCase) Create(request domain.ImageRequest) (int, error) {
 	return id, nil
 }
 
-func (i *imageUseCase) Filter(name string) ([]domain.ImageHeaderResponse, error) {
+func (i *imageUseCase) Filter(name string) (*[]domain.ImageHeaderResponse, error) {
 	all, err := i.repository.FindAll(name)
 	if err != nil {
 		return nil, err
@@ -47,16 +45,18 @@ func (i *imageUseCase) DeleteByIdOrName(key string) error {
 	return nil
 }
 
-func (i *imageUseCase) DeleteAllUnusedOnes() string {
-	reclaimedSpace := i.repository.DeleteAllUnused()
-	return fmt.Sprintf("Total reclaimed space: %.2fB", reclaimedSpace)
+func (i *imageUseCase) DeleteAllUnusedOnes() (string, error) {
+	reclaimedSpace, err := i.repository.DeleteAllUnused()
+	if err != nil {
+		return "", err
+	}
+	return fmt.Sprintf("Total reclaimed space: %.2fB", reclaimedSpace), nil
 }
 
-func (i *imageUseCase) GetOne(key string) (domain.ImageDetailedResponse, error) {
-	image := i.repository.GetByIdOrName(key)
-	log.Printf("%+v", image)
-	if (image == domain.Image{}) {
-		return domain.ImageDetailedResponse{}, errors.New("image not found")
+func (i *imageUseCase) GetOne(key string) (*domain.ImageDetailedResponse, error) {
+	image, err := i.repository.GetByIdOrName(key)
+	if err != nil {
+		return &domain.ImageDetailedResponse{}, err
 	}
 	return i.mapper.MapToDetailedResponse(image), nil
 }

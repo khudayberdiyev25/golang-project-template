@@ -6,32 +6,36 @@ import (
 )
 
 type imageOracleRepository struct {
-	db sql.DB
+	db *sql.DB
 }
 
-func NewImageOracleRepository(db sql.DB) domain.ImageRepository {
-	return imageOracleRepository{
+func NewImageOracleRepository(db *sql.DB) domain.ImageRepository {
+	return &imageOracleRepository{
 		db: db,
 	}
 }
 
-func (i imageOracleRepository) Save(image domain.Image) (int, error) {
+func (i *imageOracleRepository) Save(image *domain.Image) (int, error) {
+	//TODO implement me
 	panic("implement me")
 }
 
-func (i imageOracleRepository) FindAll(name string) ([]domain.Image, error) {
+func (i *imageOracleRepository) FindAll(name string) (*[]domain.Image, error) {
+	//TODO implement me
 	panic("implement me")
 }
 
-func (i imageOracleRepository) GetByIdOrName(key string) domain.Image {
+func (i *imageOracleRepository) GetByIdOrName(key string) (*domain.Image, error) {
+	//TODO implement me
 	panic("implement me")
 }
 
-func (i imageOracleRepository) DeleteByIdOrName(key string) error {
+func (i *imageOracleRepository) DeleteByIdOrName(key string) error {
+	//TODO implement me
 	panic("implement me")
-
 }
 
-func (i imageOracleRepository) DeleteAllUnused() float32 {
+func (i *imageOracleRepository) DeleteAllUnused() (float32, error) {
+	//TODO implement me
 	panic("implement me")
 }

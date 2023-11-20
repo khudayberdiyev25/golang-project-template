@@ -3,6 +3,7 @@ package db
 import (
 	"database/sql"
 	"fmt"
+	"log"
 )
 
 func Setup() *sql.DB {
@@ -11,7 +12,9 @@ func Setup() *sql.DB {
 		"db", 5432, "postgres", "root", "app_db",
 	)
 
-	db, _ := sql.Open("postgres", connString)
-
+	db, err := sql.Open("postgres", connString)
+	if err != nil {
+		log.Fatal(err)
+	}
 	return db
 }
