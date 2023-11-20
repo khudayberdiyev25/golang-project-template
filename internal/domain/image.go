@@ -1,8 +1,8 @@
 package domain
 
 type Image struct {
-	Id   int
-	Name string
+	Id   int    `json:"id"`
+	Name string `json:"name"`
 }
 
 type ImageRequest struct {
@@ -10,13 +10,13 @@ type ImageRequest struct {
 }
 
 type ImageDetailedResponse struct {
-	Id   int
-	Name string
+	Id   int    `json:"id"`
+	Name string `json:"name"`
 }
 
 type ImageHeaderResponse struct {
-	Id   int
-	Name string
+	Id   int    `json:"id"`
+	Name string `json:"name"`
 }
 
 type ImageUseCase interface {

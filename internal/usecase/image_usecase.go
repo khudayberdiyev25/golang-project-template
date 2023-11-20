@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"golang-project-template/internal/domain"
 	"golang-project-template/internal/repository"
+	"log"
 )
 
 type imageUseCase struct {
@@ -48,13 +49,14 @@ func (i *imageUseCase) DeleteByIdOrName(key string) error {
 
 func (i *imageUseCase) DeleteAllUnusedOnes() string {
 	reclaimedSpace := i.repository.DeleteAllUnused()
-	return fmt.Sprintf("Total reclaimed space: %s", reclaimedSpace)
+	return fmt.Sprintf("Total reclaimed space: %.2fB", reclaimedSpace)
 }
 
 func (i *imageUseCase) GetOne(key string) (domain.ImageDetailedResponse, error) {
 	image := i.repository.GetByIdOrName(key)
+	log.Printf("%+v", image)
 	if (image == domain.Image{}) {
-		return domain.ImageDetailedResponse{}, errors.New("Image not found")
+		return domain.ImageDetailedResponse{}, errors.New("image not found")
 	}
 	return i.mapper.MapToDetailedResponse(image), nil
 }
