@@ -1,0 +1,53 @@
+syntax = "proto3";
+
+option go_package = "/internal/deliver/grpc/stub";
+
+message ImageRequest {
+  optional string name = 1;
+  optional string repoTag = 2;
+}
+
+message ImageHeaderReply {
+  int32 id = 1;
+  string name = 2;
+  string repoTag = 3;
+}
+
+message ImageHeaderListResponse {
+  repeated ImageHeaderReply images = 1;
+}
+
+message ImageDetailedReply {
+  int32 id = 1;
+  string name = 2;
+  string repoTag = 3;
+}
+
+message ImageId {
+  int32 value = 1;
+}
+
+message ImageSpecification {
+  string name = 1;
+}
+
+message ImageKey {
+  string key = 1;
+}
+
+message ImageEmptyReply {
+
+}
+
+message ImagePruneReply {
+  string content = 1;
+}
+
+service ImageService {
+  rpc Create(ImageRequest) returns (ImageId) {}
+  rpc FindAll (ImageSpecification) returns (ImageHeaderListResponse){};
+  rpc GetOne(ImageKey) returns (ImageDetailedReply) {}
+  rpc DeleteOne(ImageKey) returns (ImageEmptyReply) {}
+  rpc Delete(ImageSpecification) returns (ImagePruneReply){}
+}
+

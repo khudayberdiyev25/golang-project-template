@@ -21,9 +21,9 @@ type Container struct {
 }
 
 type ContainerRequest struct {
-	Name    string
-	ImageId int
-	Command string
+	Name    string `json:"name"`
+	ImageId int    `json:"imageId"`
+	Command string `json:"command"`
 }
 
 type ContainerHeaderResponse struct {

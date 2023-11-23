@@ -13,7 +13,7 @@ func SetupDB() *sql.DB {
 		os.Getenv("POSTGRES_HOST"), os.Getenv("POSTGRES_PORT"), os.Getenv("POSTGRES_USER"), os.Getenv("POSTGRES_PASSWORD"), os.Getenv("POSTGRES_DATABASE"),
 	)
 
-	db, err := sql.Open(os.Getenv("DATABASE_DRIVER_NAME"), connString)
+	db, err := sql.Open("postgres", connString)
 	if err != nil {
 		log.Fatal(err)
 	}

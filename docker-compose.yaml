@@ -13,6 +13,7 @@ services:
     working_dir: /app
     ports:
       - "5005:5005"
+      - "5006:5006"
     env_file:
       - .env
     environment:
